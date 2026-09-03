@@ -10,19 +10,27 @@ export default function TaskCard({task,onDelete,onEditTask}) {
     const [isEditing,setIsEditing]= useState(false);    
     const [title,setTitle]= useState(task.title);        
     const [description,setDescription]= useState(task.description);
+    const [status,setStatus]= useState(task.status);
     const [dueDate,setDueDate]= useState(task.dueDate);
     const [priority,setPriority]= useState(task.priority);
     
     function handleSave(){
-        onEditTask(task.id,{title,description,dueDate,priority});
+        onEditTask(task.id,{title,description,status,dueDate,priority});
         setIsEditing(false); 
     }
     if(isEditing){
         return(
             <div className="task">
                 <h3><input value={title} onChange={(e)=>setTitle(e.target.value)}/></h3>
-                <p><input value={description} onChange={(e)=>setDescription(e.target.value)}/></p>
-                <p style={{color:statusColors[task.status]}}>Status: {task.status}</p>
+                <p><textarea className="descriptionInput" value={description} onChange={(e)=>setDescription(e.target.value)}/></p>
+                <p style={{color:statusColors[task.status]}}>
+                    Status: <select value={status} onChange={(e)=> setStatus(e.target.value)}>
+                         <option value="To Do">To do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+                        </select>
+                    </p>
+                <input type="date" value={dueDate} onChange={(e)=>setDueDate(e.target.value)}/>
                 <p>
                     Priority: 
                     <select value={priority} onChange={(e)=>setPriority(e.target.value)}>

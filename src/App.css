@@ -30,7 +30,12 @@ body {
     display: flex;
     gap: 10px;
 }
+.taskActions{
 
+    display: flex;
+     justify-content: space-around;
+}
+ 
 
 
 .login, .signup {
@@ -52,7 +57,7 @@ body {
    padding: 10px 15px;
 }
 .addTaskButton,#searchButton,.deleteTaskButton,.editTaskButton , button{
-    margin-left: 20px;
+    /* margin-left: 20px; */
     padding: 8px 16px;
     font-size: 14px;
     border: none;
@@ -63,13 +68,16 @@ body {
 
    
 }
+#searchButton {
+    margin-left: 15px;
+}
 
 
 
-#taskList {
+#taskList ,.archiveList{
     display: grid;
    
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
 }
 
@@ -77,12 +85,22 @@ body {
 .task {
  display:grid;
  grid-template-rows:auto 1fr auto auto auto;
+ 
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     padding: 20px;
     transition: transform 0.2s ease;
 
+}
+.descriptionInput {
+  width: 100%;
+  min-height: 90px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: inherit;
+  resize: none;
+  box-sizing: border-box;
 }
 
 
@@ -100,18 +118,73 @@ body {
     align-items: center;
     margin-bottom: 20px;
 }
+.sortLabel button{
+    margin-left: 15px;
+}
 .task p {
     margin-bottom: 8px;
     font-size: 0.95rem;
     color: #555;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
-.task .completed{
-    opacity: 55%;
+.task.completed{
+    opacity: 65%;
 }
-.task .completed h3, .task.completed p{
+.task.completed h3, .task.completed p{
     text-decoration: line-through;
 }
 
 .task p:last-child {
     margin-bottom: 0;
+}
+.confirmOverlay{
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.addTaskForm{
+   background:white;
+   display: grid;
+    
+   padding: 24px;
+   border-radius: 8px;
+   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+   text-align:center;
+}
+.archiveToggle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+.archiveToggle button{
+    margin-left: 15px;
+}
+.addTaskForm button{
+    margin-top: 19px;
+}
+#addTaskFormOverlay{
+    display: flex;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.confirmBox{
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align:center;
+}
+.confirmBox button{
+    margin: 0 8px;
+    margin-top: 18px;
 }
