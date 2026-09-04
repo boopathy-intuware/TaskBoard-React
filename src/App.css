@@ -128,13 +128,22 @@ body {
     overflow-wrap: break-word;
     word-break: break-word;
 }
-.task.completed{
-    opacity: 65%;
-}
+
+
+
 .task.completed h3, .task.completed p{
+    opacity: 65%;
     text-decoration: line-through;
 }
+#summaryCounter{
+    display: flex;
+     justify-content: center; 
+    gap: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
 
+    
+}
 .task p:last-child {
     margin-bottom: 0;
 }

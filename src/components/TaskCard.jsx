@@ -1,10 +1,5 @@
 import { useState } from "react";
-
-const statusColors = {
-  'To Do': 'gray',
-  'In Progress': 'yellow',
-  'Completed': 'green'
-};
+import {statusColors} from '../statusColors';
 
 export default function TaskCard({task,onDelete,onEditTask,isSelected,onToggleSelect}) {
     const [isEditing,setIsEditing]= useState(false);    

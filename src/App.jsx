@@ -7,6 +7,7 @@ import TaskList from './components/TaskList';
 import SearchBar from './components/SearchBar';
 import SortBar from './components/SortBar';
 import ArchiveList from './components/ArchiveList';
+import { statusColors } from './statusColors';
 function App() {
   
   const [tasks,setTasks] =useState([
@@ -118,12 +119,15 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
   }
   return sortDirection==='asc' ? comparison : -comparison;
 });
+const toDoCount= visibleTasks.filter((task)=>task.status==='To Do').length;
+const inProgressCount= visibleTasks.filter((task)=>task.status==='In Progress').length;
+const archivedCount= archivedTasks.length;
 const [selectedIds,setSelectedIds]= useState([]);
 
 function handleToggleSelect(id)
 {
   setSelectedIds((prev)=>
-  prev.includes(id) ? prev.filter((selectedId)=> selectedId!=id): [...prev,id]
+  prev.includes(id) ? prev.filter((selectedId)=> selectedId!==id): [...prev,id]
   );
 
 }
@@ -140,14 +144,14 @@ function handleBulkDelete()
 {
   setTasks(tasks.filter((task)=> !selectedIds.includes(task.id)));
   setSelectedIds([]);
-
-
-}
-// archivedTasks= visibleTasks.find((task)=>task.status==='Completed');
-// visibleTasks= visibleTasks.filter((task)=>task.status!='Completed');
-
+  
+  
+  }
+  // archivedTasks= visibleTasks.find((task)=>task.status==='Completed');
+  // visibleTasks= visibleTasks.filter((task)=>task.status!='Completed');
+  
   return (
-  <div>
+    <div>
 
       
  <header id="header">
@@ -159,14 +163,11 @@ function handleBulkDelete()
 </header>
   
     <div className="container">
+      {!showArchive &&<div>
     <div id="addTaskContainer"><h2>Tasks
-      <span id="summaryCounter"></span>
+      
       <button id="addTaskButton" className="addTaskButton" onClick={()=>setShowForm(true)}>Add Task</button>
-      {/*<span id="buttons" style={{display:'none'}}>
-        <button id="markDone">Mark Done</button>
-        <button id="deleteBulk">Delete</button>
-        </span> */
-        }
+    
 
       </h2>
 
@@ -177,46 +178,62 @@ function handleBulkDelete()
    <SearchBar searchText={searchText} onSearchChange={setSearchText}/>
     <button id="searchButton">Search</button>
     </span>
-    {!showArchive && <FilterBar filterStatus={filterStatus} onFilterChange={setFilterStatus}/>}
+    <FilterBar filterStatus={filterStatus} onFilterChange={setFilterStatus}/>
     <SortBar sortBy={sortBy} sortDirection={sortDirection}
     onSortByChange={setSortBy}
     onToggleDirection={()=> setSortDirection((d)=>(d=== 'asc' ? 'desc' : 'asc'))}
     />
 </span> 
+</div>
+}
+    {
+      !showArchive ?(
 
+    <span id="summaryCounter">
+     <span style={{color:statusColors['To Do']}}>To do: {toDoCount} </span>
+     <span style={{color:statusColors['In Progress']}}>In Progress: {inProgressCount}</span>
+
+    </span>
+      ) :(
+    <span id="summaryCounter">
+    <span style={{color:statusColors['Completed']}}>Archived: {archivedCount}</span>
+    </span>
+
+      )
+    }
   {showArchive ? ( <div className="archiveToggle">
-
+    
     <span>
-
-<h2>
-   Archives
-  <button onClick={()=> setShowArchive(!showArchive)}>
+    
+    <h2>
+    Archives
+    <button onClick={()=> setShowArchive(!showArchive)}>
     Back to Board
-  </button>
-</h2>
-  </span>
-  <button onClick={()=>setDelArchives(true)}>Delete All</button>
-  </div>
+    </button>
+    </h2>
+    </span>
+    <button onClick={()=>setDelArchives(true)}>Delete All</button>
+    </div>
   ):( <div className="archiveToggle">
-
-  <span>
-
-  <h2>
+    
+    <span>
+    
+    <h2>
     Board   
-  <button onClick={()=> setShowArchive(!showArchive)}>
+    <button onClick={()=> setShowArchive(!showArchive)}>
     Show Archives
-  </button>
-  </h2>
-  </span>
-  { selectedIds.length>0 &&
-
-  <span>
-    <button onClick={handleBulkMarkDone}>Mark done</button>
-    <button onClick={handleBulkDelete}>Delete selected</button>
-  </span>
-  }
-  </div>
-
+    </button>
+    </h2>
+    </span>
+    { selectedIds.length>0 &&
+      
+      <span>
+      <button onClick={handleBulkMarkDone}>Mark done</button>
+      <button onClick={handleBulkDelete}>Delete selected</button>
+      </span>
+    }
+    </div>
+    
   )}
 
 {taskDelId !== null && (

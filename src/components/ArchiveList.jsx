@@ -1,9 +1,6 @@
 import React from 'react'
-const statusColors = {
-  'To Do': 'gray',
-  'In Progress': 'yellow',
-  'Completed': 'green'
-};
+import { statusColors } from '../statusColors';
+
 export default function ArchiveList({archivedTasks,handleRestoreTask}) {
   return (
     <div className="archiveList">
