@@ -35,6 +35,8 @@ function App() {
 
  const [taskDelId,setTaskDelId]= useState(null);
 
+
+
  function confirmDelete(){
   setTasks(tasks.filter((task)=> task.id !== taskDelId));
   setTaskDelId(null);
@@ -62,6 +64,9 @@ function confirmDeleteArchives()
 function cancelDeleteArchives(){
   setDelArchives(!delArchives);
 }
+
+
+
 function handleRestoreTask(id){
 
 const taskToRestore =archivedTasks.find((task)=>task.id===id);
@@ -113,6 +118,31 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
   }
   return sortDirection==='asc' ? comparison : -comparison;
 });
+const [selectedIds,setSelectedIds]= useState([]);
+
+function handleToggleSelect(id)
+{
+  setSelectedIds((prev)=>
+  prev.includes(id) ? prev.filter((selectedId)=> selectedId!=id): [...prev,id]
+  );
+
+}
+
+function handleBulkMarkDone()
+{
+const tasksToArchive= tasks.filter((task)=> selectedIds.includes(task.id)).
+map((task)=>({...task,status: 'Completed'}));
+setTasks(tasks.filter((task)=> !selectedIds.includes(task.id)));
+setArchivedTasks([...archivedTasks,...tasksToArchive]);
+setSelectedIds([]);
+}
+function handleBulkDelete()
+{
+  setTasks(tasks.filter((task)=> !selectedIds.includes(task.id)));
+  setSelectedIds([]);
+
+
+}
 // archivedTasks= visibleTasks.find((task)=>task.status==='Completed');
 // visibleTasks= visibleTasks.filter((task)=>task.status!='Completed');
 
@@ -132,10 +162,12 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
     <div id="addTaskContainer"><h2>Tasks
       <span id="summaryCounter"></span>
       <button id="addTaskButton" className="addTaskButton" onClick={()=>setShowForm(true)}>Add Task</button>
-      {/* <span id="buttons" style={{display:'none'}}>
+      {/*<span id="buttons" style={{display:'none'}}>
         <button id="markDone">Mark Done</button>
-      <button id="deleteBulk">Delete</button>
-      </span> */}
+        <button id="deleteBulk">Delete</button>
+        </span> */
+        }
+
       </h2>
 
     
@@ -176,10 +208,13 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
   </button>
   </h2>
   </span>
+  { selectedIds.length>0 &&
+
   <span>
-    <button>Mark done</button>
-    <button>Delete selected</button>
+    <button onClick={handleBulkMarkDone}>Mark done</button>
+    <button onClick={handleBulkDelete}>Delete selected</button>
   </span>
+  }
   </div>
 
   )}
@@ -194,7 +229,7 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
     </div>
   </div>
 )}
-{delArchives  && (
+{(delArchives  && archivedTasks.length>0) &&
   <div className="confirmOverlay">
     <div className="confirmBox">
       <p>Delete All Archives? This can't be undone.</p>
@@ -203,11 +238,24 @@ visibleTasks=[...visibleTasks].sort((a,b)=>{
 
     </div>
   </div>
-)}
+}
+
+{ (delArchives && !archivedTasks.length)&&
+  <div className="confirmOverlay">
+    <div className="confirmBox">
+      <p>There are no archives to be deleted.</p>
+    
+<button onClick={cancelDeleteArchives}>Okay</button>
+
+    </div>
+  </div>
+
+
+}
 {showForm && <AddTaskForm onAddTask={handleAddTask} />}
 
     {showArchive ? (<ArchiveList archivedTasks={archivedTasks} handleRestoreTask={handleRestoreTask}/>) :
-    (<TaskList tasks={visibleTasks} onDelete={(id)=> setTaskDelId(id)} onEditTask={handleEditTask}/>)
+    (<TaskList tasks={visibleTasks} onDelete={(id)=> setTaskDelId(id)} onEditTask={handleEditTask} selectedIds={selectedIds} onToggleSelect={handleToggleSelect}/>)
 
 
 

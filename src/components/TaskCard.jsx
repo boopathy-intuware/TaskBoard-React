@@ -6,7 +6,7 @@ const statusColors = {
   'Completed': 'green'
 };
 
-export default function TaskCard({task,onDelete,onEditTask}) {
+export default function TaskCard({task,onDelete,onEditTask,isSelected,onToggleSelect}) {
     const [isEditing,setIsEditing]= useState(false);    
     const [title,setTitle]= useState(task.title);        
     const [description,setDescription]= useState(task.description);
@@ -53,7 +53,7 @@ export default function TaskCard({task,onDelete,onEditTask}) {
     <div className={`task ${task.status === 'Completed' ? 'completed' : ''}`}>
         <h3>
             {task.title}
-            {task.status !== 'Completed' && <input type="checkbox"/>}
+            {task.status !== 'Completed' && <input type="checkbox" checked={isSelected} onChange={()=> onToggleSelect(task.id)}/>}
         </h3>
         <p>{task.description}</p>
         <p style={{color:statusColors[task.status]}}>
